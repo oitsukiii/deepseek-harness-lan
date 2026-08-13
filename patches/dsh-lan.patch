@@ -16,7 +16,7 @@ index feb85db..765a496 100644
   */
 +// Local patch: crypto.randomUUID is only available in secure contexts
 +// (HTTPS or localhost). When dsh is served over plain HTTP on a LAN IP
-+// (e.g. http://192.168.2.102:3080), provide a standards-shaped fallback so
++// (e.g. http://192.168.1.100:3080), provide a standards-shaped fallback so
 +// provider-directory loading and other client code keeps working.
 +if (typeof globalThis.crypto === 'object' && typeof globalThis.crypto.randomUUID !== 'function') {
 +  try {
@@ -42,7 +42,7 @@ index af6997c..d3d5da3 100644
    const program = webCommand()
    program.action(() => {
      const options = program.opts<WebOptions>()
-+    // Local patch: allow explicit LAN binds (e.g. --host 192.168.2.102) so the
++    // Local patch: allow explicit LAN binds (e.g. --host 192.168.1.100) so the
 +    // UI can be reached from home devices. 0.0.0.0 wildcard remains a usage error.
      if (options.host === '0.0.0.0') {
 -      program.error('error: --host 0.0.0.0 is intentionally not supported yet for safety: it would expose remote code execution to the network; use 127.0.0.1 instead')

@@ -16,9 +16,9 @@ set -euo pipefail
 # ---- colors (TTY only) ----
 if [ -t 1 ]; then
   C_GREEN=$'\033[0;32m'; C_YELLOW=$'\033[1;33m'; C_RED=$'\033[0;31m'
-  C_CYAN=$'\033[0;36m'; C_BOLD=$'\033[1m'; C_RESET=$'\033[0m'
+  C_CYAN=$'\033[0;36m'; C_RESET=$'\033[0m'
 else
-  C_GREEN=''; C_YELLOW=''; C_RED=''; C_CYAN=''; C_BOLD=''; C_RESET=''
+  C_GREEN=''; C_YELLOW=''; C_RED=''; C_CYAN=''; C_RESET=''
 fi
 ok()   { echo -e "${C_GREEN}✓${C_RESET} $*"; }
 warn() { echo -e "${C_YELLOW}⚠${C_RESET} $*"; }
@@ -83,7 +83,7 @@ ok "[3/4] 补丁应用成功"
 
 # ---- 5. build dependency ----
 info "[4/4] 检查构建依赖 unrun（tsdown 需要）..."
-if ! ls "$DSH_DIR/node_modules/.pnpm" 2>/dev/null | grep -q '^unrun@'; then
+if ! compgen -G "$DSH_DIR/node_modules/.pnpm/unrun@*" >/dev/null; then
   if (cd "$DSH_DIR" && pnpm add -D unrun -w >/dev/null 2>&1); then
     ok "[4/4] unrun 已安装"
   else

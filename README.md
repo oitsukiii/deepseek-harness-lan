@@ -66,7 +66,7 @@ pnpm install
 #### ③ 克隆 dsh-lan 并打补丁
 
 ```bash
-git clone https://github.com/<your-name>/dsh-lan.git
+git clone https://github.com/oitsukiii/dsh-lan.git
 cd dsh-lan
 ./apply.sh /path/to/deepseek-harness
 ```
