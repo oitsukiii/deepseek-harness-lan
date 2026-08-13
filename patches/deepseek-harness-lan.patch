@@ -1,0 +1,89 @@
+# deepseek-harness-lan patch
+# Target: deepseek-harness 0.1.0-rc.5 (commit 47f9438)
+# What:   allow binding the dsh web UI to a specific LAN IP + trust it
+#         (4 files: webserver host schema, web-app CLI, web entry polyfill,
+#          client-connection privileged-method trust)
+# Apply:  git apply deepseek-harness-lan.patch   (or use ../apply.sh)
+# Revert: git apply -R deepseek-harness-lan.patch (or use ../revert.sh)
+#
+diff --git a/apps/web/src/main.ts b/apps/web/src/main.ts
+index feb85db..765a496 100644
+--- a/apps/web/src/main.ts
++++ b/apps/web/src/main.ts
+@@ -3,6 +3,23 @@
+  * loader holding, module-table seeding, AppRoot gate, plugin assembly — lives
+  * in @deepseek-ai/dsh-client-web; this file only finds the mount point.
+  */
++// Local patch: crypto.randomUUID is only available in secure contexts
++// (HTTPS or localhost). When dsh is served over plain HTTP on a LAN IP
++// (e.g. http://192.168.1.100:3080), provide a standards-shaped fallback so
++// provider-directory loading and other client code keeps working.
++if (typeof globalThis.crypto === 'object' && typeof globalThis.crypto.randomUUID !== 'function') {
++  try {
++    globalThis.crypto.randomUUID = () =>
++      'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
++        const r = (Math.random() * 16) | 0
++        const v = c === 'x' ? r : (r & 0x3) | 0x8
++        return v.toString(16)
++      })
++  } catch {
++    // crypto may be read-only in exotic embeds; leave the missing function
++    // and let the caller surface its own error.
++  }
++}
+ import { AppWebEntry } from '@deepseek-ai/dsh-client-web'
+ 
+ const el = document.getElementById('root')
+diff --git a/packages/bundle/web-app/src/startup.ts b/packages/bundle/web-app/src/startup.ts
+index af6997c..d3d5da3 100644
+--- a/packages/bundle/web-app/src/startup.ts
++++ b/packages/bundle/web-app/src/startup.ts
+@@ -66,8 +66,10 @@ export function apply(ctx: Context): void {
+   const program = webCommand()
+   program.action(() => {
+     const options = program.opts<WebOptions>()
++    // Local patch: allow explicit LAN binds (e.g. --host 192.168.1.100) so the
++    // UI can be reached from home devices. 0.0.0.0 wildcard remains a usage error.
+     if (options.host === '0.0.0.0') {
+-      program.error('error: --host 0.0.0.0 is intentionally not supported yet for safety: it would expose remote code execution to the network; use 127.0.0.1 instead')
++      program.error('error: --host 0.0.0.0 wildcard is intentionally not supported for safety: it would expose remote code execution to the whole network; pass a specific LAN IP instead')
+     }
+     if (options.port !== undefined && !/^\d+$/.test(options.port)) {
+       program.error(`error: --port must be a number, got ${JSON.stringify(options.port)}`)
+diff --git a/packages/client/connection/src/index.ts b/packages/client/connection/src/index.ts
+index 3508491..63a4b53 100644
+--- a/packages/client/connection/src/index.ts
++++ b/packages/client/connection/src/index.ts
+@@ -144,7 +144,7 @@ export function apply(ctx: Context, config?: ConnectionConfig): void {
+         : undefined
+       if (method !== undefined
+         && PRIVILEGED_METHODS.has(method)
+-        && !isTrustedApiRequest(request, [])) {
++        && !isTrustedApiRequest(request, trustedHosts)) {
+         return new Response('forbidden', { status: 403 })
+       }
+       if (request.method === 'GET' && (pathname === MUX_EVENTS_PATH || pathname === HOST_EVENTS_PATH)) {
+diff --git a/packages/host/webserver/src/index.ts b/packages/host/webserver/src/index.ts
+index a6c335b..33edf23 100644
+--- a/packages/host/webserver/src/index.ts
++++ b/packages/host/webserver/src/index.ts
+@@ -43,8 +43,8 @@ export interface WebUpgradeRoute {
+ 
+ /** Gateway config: the listen address. */
+ export interface Config {
+-  /** Listen host; the two supported values are loopback and all-interfaces. */
+-  host: '127.0.0.1' | '0.0.0.0'
++  /** Listen host; loopback, all-interfaces, or a specific LAN IP. */
++  host: string
+   /** Listen port; zero requests an OS-assigned port. */
+   port: number
+ }
+@@ -58,7 +58,7 @@ export interface Config {
+  */
+ export class WebServer extends Service {
+   static Config: z<Config> = z.object({
+-    host: z.union([z.const('127.0.0.1'), z.const('0.0.0.0')]).required(),
++    host: z.string().required(),
+     port: z.natural().max(65535).required(),
+   })
+ 
