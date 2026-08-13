@@ -1,3 +1,11 @@
+# dsh-lan patch
+# Target: deepseek-harness 0.1.0-rc.5 (commit 47f9438)
+# What:   allow binding the dsh web UI to a specific LAN IP + trust it
+#         (4 files: webserver host schema, web-app CLI, web entry polyfill,
+#          client-connection privileged-method trust)
+# Apply:  git apply dsh-lan.patch   (or use ../apply.sh)
+# Revert: git apply -R dsh-lan.patch (or use ../revert.sh)
+#
 diff --git a/apps/web/src/main.ts b/apps/web/src/main.ts
 index feb85db..765a496 100644
 --- a/apps/web/src/main.ts

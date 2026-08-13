@@ -7,6 +7,8 @@
 ![dsh](https://img.shields.io/badge/dsh-0.1.0--rc.5-blue)
 ![built-with](https://img.shields.io/badge/built%20with-DeepSeek%20V4%20Flash-4D6BFE)
 
+> **🎯 目标版本：dsh `0.1.0-rc.5`（commit `47f9438`）** —— 补丁基于该版本编写并验证，其他版本可能失效（详见 [🧩 兼容性](#-兼容性)）。
+
 ---
 
 ## 📖 这是什么
@@ -34,7 +36,9 @@ it would expose remote code execution to the network; use 127.0.0.1 instead
 
 ### 依赖
 
-- [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 源码（≥ 0.1.0-rc.5）
+- [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 源码，**版本 `0.1.0-rc.5`（commit `47f9438`）**
+  - 检查方法：`git log --oneline -1` 应显示 `47f9438`；`package.json` 中 `version` 应为 `0.1.0-rc.5`
+  - 若你的版本不同，见 [🧩 兼容性](#-兼容性) 的适配说明
 - Node.js ≥ 24、pnpm
 
 ### 安装
@@ -193,6 +197,19 @@ if (typeof globalThis.crypto === 'object' && typeof globalThis.crypto.randomUUID
 - ❌ **不要**用 `--host 0.0.0.0`（补丁后依然被拒绝，这是有意保留的防线）。
 - 💡 进阶：可以在 dsh 前面再套一层**带认证的反向代理**（如 nginx Basic Auth）。
 - 🔐 `--trusted-host` 是官方 browser-trust 机制的显式信任入口，请只填你自己的局域网 IP。
+
+## 🧩 兼容性
+
+**本补丁针对 dsh `0.1.0-rc.5`（commit `47f9438`）编写并验证。**
+
+- 验证链路：patch 应用 → `pnpm run build:web` 构建 → Web UI 页面加载 → `/api` 接口调用 → 特权接口（`settings.describe` 等）全通过。
+- dsh 上游迭代很快，**其他版本大概率会失效**：
+  - 源码上下文变化时，`apply.sh` 的 `git apply --check` 会**检查失败并安全中止**，不会弄脏你的仓库（这是保护机制，不是 bug）。
+- **适配新版本**：
+  1. 在新版本上运行 `apply.sh`，失败后记录冲突文件；
+  2. 对照 [🧠 技术原理](#-技术原理) 的"三道闸"思路手工适配；
+  3. 欢迎把适配后的 patch 提 PR 回本仓库。
+- **还原**：`revert.sh` 一键还原，之后可正常 `git pull` 更新 dsh。
 
 ## ❓ FAQ
 
