@@ -34,46 +34,65 @@ it would expose remote code execution to the network; use 127.0.0.1 instead
 
 ## 🚀 快速开始
 
-### 依赖
+### 从零到跑通（共 6 步）
 
-- [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 源码，**版本 `0.1.0-rc.5`（commit `47f9438`）**
-  - 检查方法：`git log --oneline -1` 应显示 `47f9438`；`package.json` 中 `version` 应为 `0.1.0-rc.5`
-  - 若你的版本不同，见 [🧩 兼容性](#-兼容性) 的适配说明
-- Node.js ≥ 24、pnpm
+核心顺序一句话：**先装好 dsh 源码，再跑 `apply.sh` 打补丁**——`apply.sh` 是打补丁工具，不是 dsh 安装器。
 
-### 安装
+#### ① 准备环境
+
+- Node.js **≥ 24**（`node -v` 验证）
+- pnpm（`pnpm -v` 验证）
+- git
+- 🪟 Windows 用户：bash 脚本请在 **Git Bash 或 WSL** 中运行；dsh 源码本身跨平台
+
+#### ② 获取 dsh 源码
 
 ```bash
-# 1. 准备 dsh 源码
 git clone https://github.com/deepseek-ai/deepseek-harness.git
 cd deepseek-harness
 pnpm install
+```
 
-# 2. 克隆本仓库并打补丁
+> ⚠️ **必须是 git clone 的源码**，不能用 `npm install` 装的成品包——补丁要改源码文件。
+> ⚠️ **不要用 `--depth 1` 浅克隆**（后面固定版本需要完整历史）。
+>
+> 当前 master 分支即目标版本 `0.1.0-rc.5`（commit `47f9438`）。若日后上游已前进（`apply.sh` 会提示版本不匹配），先固定版本再继续：
+>
+> ```bash
+> git checkout 47f9438
+> pnpm install
+> ```
+
+#### ③ 克隆 dsh-lan 并打补丁
+
+```bash
 git clone https://github.com/<your-name>/dsh-lan.git
 cd dsh-lan
 ./apply.sh /path/to/deepseek-harness
 ```
 
-> 💡 **目录无关**：`dsh-lan` 和 `deepseek-harness` 可以放在任意目录（任意组合）——脚本自动定位自身 patch、按参数定位 dsh 仓库，无硬编码路径。三种运行方式任选：传 dsh 路径参数、`cd` 到 dsh 目录再跑、或把 dsh-lan 放在 dsh 旁边。
->
-> 🪟 **Windows 用户**：脚本是 bash，请在 **Git Bash 或 WSL** 中运行；`dsh` 源码本身跨平台。
->
-> ⚙️ **环境要求**：`node` / `git` / `pnpm` 需在 PATH 中（dsh 本身的要求，非本脚本额外依赖）。
+`apply.sh` 自动完成：版本校验 → 检查能否干净应用 → 打补丁 → 补装构建依赖 `unrun`。看到 **`✓ 补丁应用完成`** 即成功。
 
-### 启动
+> 💡 **目录无关**：`dsh-lan` 和 `deepseek-harness` 可以放在任意目录（任意组合）——脚本自动定位自身 patch、按参数定位 dsh 仓库，无硬编码路径。三种运行方式任选：传 dsh 路径参数、`cd` 到 dsh 目录再跑、或把 dsh-lan 放在 dsh 旁边。
+
+#### ④ 重新构建前端
 
 ```bash
 cd /path/to/deepseek-harness
-
-# 重新构建前端（randomUUID polyfill 在 web 产物里）
 pnpm run build:web
+```
 
-# 绑定你的局域网 IP 并信任它
+> randomUUID polyfill 在 web 产物里，**必须重新构建才生效**。
+
+#### ⑤ 启动并绑定局域网 IP
+
+```bash
 pnpm dsh web --host 192.168.1.100 --trusted-host 192.168.1.100
 ```
 
-### 访问
+把 `192.168.1.100` 换成你的局域网 IP（`ip addr` 或路由器后台查看）。
+
+#### ⑥ 访问与验证
 
 在其他设备（Windows / 手机 / 平板）浏览器打开：
 
@@ -83,11 +102,19 @@ http://192.168.1.100:3080
 
 > ⚠️ 若之前打开过，请 **Ctrl + F5 强制刷新**（浏览器可能缓存旧 JS）。
 
-### 还原
+**验证清单**：
+
+- [ ] 页面正常加载，标题 "DeepSeek Harness"
+- [ ] 配置模型 API 不报 403 / `crypto.randomUUID is not a function`
+- [ ] 局域网其他设备也能打开
+
+#### 还原（可选）
 
 ```bash
 ./revert.sh /path/to/deepseek-harness
 ```
+
+一键移除补丁，之后可正常 `git pull` 更新 dsh。
 
 ---
 
