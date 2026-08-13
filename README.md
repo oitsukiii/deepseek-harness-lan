@@ -118,6 +118,55 @@ http://192.168.1.100:3080
 
 ---
 
+## 🔀 备选方案：不改源码（SSH 隧道）
+
+如果你**不想改 dsh 源码**（想保持官方原样、官方升级零维护），SSH 隧道是唯一干净的局域网访问方式——**零补丁，三道闸天然全通**。
+
+### 原理（为什么不用打补丁）
+
+dsh 的信任检查（browser-trust）**看的是请求的 Host 头，不是来源 IP**（DNS rebinding 防御）；而 `crypto.randomUUID` 只在 secure context（HTTPS 或 localhost）可用。SSH 隧道让浏览器始终以 `127.0.0.1` 访问 dsh，于是：
+
+| 三道闸 | SSH 隧道下 | 为什么 |
+|---|---|---|
+| 闸 1（CLI/schema） | ✅ 不触发 | dsh 监听 `127.0.0.1` = 官方默认值，无需改动 |
+| 闸 2（browser-trust） | ✅ 含特权接口 | Host 头 = `127.0.0.1` → loopback 豁免（原版特权接口也只放行 loopback） |
+| 闸 3（randomUUID） | ✅ 可用 | `127.0.0.1` 属于 secure context，浏览器原生提供 |
+
+### 步骤
+
+```bash
+# 1. 按官方原样启动 dsh（不打补丁，监听 127.0.0.1:3080）
+cd /path/to/deepseek-harness
+pnpm dsh web
+```
+
+在需要访问的电脑上开隧道（Windows 10/11 自带 OpenSSH）：
+
+```powershell
+ssh -N -L 3080:127.0.0.1:3080 <user>@<NAS-IP>
+```
+
+浏览器打开：
+
+```
+http://127.0.0.1:3080
+```
+
+配置 API、特权接口、全部功能均可正常使用。
+
+### 对比
+
+| 方案 | 改源码 | 电脑 | 手机/平板 | 官方升级 |
+|---|---|---|---|---|
+| **SSH 隧道**（本方案） | ❌ 零改动 | ✅ | ⚠️ 每台设备配隧道 | 直接 `git pull`，无感 |
+| **dsh-lan 补丁**（主方案） | ✅ 4 处最小 diff | ✅ | ✅ 直接开网址 | 需重新打补丁 |
+
+### 为什么 nginx 反代不行
+
+反代（无论 HTTP 还是 HTTPS）后 Host 头变成局域网 IP，而**原版特权接口**（`settings.describe`、`llm.providers` 等——配置模型 API 必需）是 `isTrustedApiRequest(request, [])` 强制只放行 loopback，所以配置 API 那步必然 403。SSH 隧道是唯一"不改源码且功能完整"的路径；想全设备直接开网址访问，就用主方案的补丁。
+
+---
+
 ## 🧠 技术原理
 
 dsh 官方阻止局域网访问，一共有 **三道闸**。本项目的 4 个补丁逐个击破：
