@@ -55,6 +55,12 @@ cd dsh-lan
 ./apply.sh /path/to/deepseek-harness
 ```
 
+> 💡 **目录无关**：`dsh-lan` 和 `deepseek-harness` 可以放在任意目录（任意组合）——脚本自动定位自身 patch、按参数定位 dsh 仓库，无硬编码路径。三种运行方式任选：传 dsh 路径参数、`cd` 到 dsh 目录再跑、或把 dsh-lan 放在 dsh 旁边。
+>
+> 🪟 **Windows 用户**：脚本是 bash，请在 **Git Bash 或 WSL** 中运行；`dsh` 源码本身跨平台。
+>
+> ⚙️ **环境要求**：`node` / `git` / `pnpm` 需在 PATH 中（dsh 本身的要求，非本脚本额外依赖）。
+
 ### 启动
 
 ```bash
