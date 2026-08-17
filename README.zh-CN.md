@@ -6,10 +6,10 @@
 > 让 DeepSeek Harness 的 Web UI 在局域网里跑起来——从 Windows / 手机 / 平板直接打开。
 
 ![License](https://img.shields.io/badge/license-MIT-green)
-![dsh](https://img.shields.io/badge/dsh-0.1.0--rc.5-blue)
+![dsh](https://img.shields.io/badge/dsh-0.1.0--rc.7-blue)
 ![built-with](https://img.shields.io/badge/built%20with-DeepSeek%20V4%20Flash-4D6BFE)
 
-> **🎯 目标版本：dsh `0.1.0-rc.5`（commit `47f9438`）** —— 补丁基于该版本编写并验证，其他版本可能失效（详见 [🧩 兼容性](#-兼容性)）。
+> **🎯 目标版本：dsh `0.1.0-rc.7`（commit `99f6f02`）** —— 补丁基于该版本编写并验证，其他版本可能失效（详见 [🧩 兼容性](#-兼容性)）。
 
 ---
 
@@ -31,7 +31,7 @@ it would expose remote code execution to the network; use 127.0.0.1 instead
 - 🔧 **4 个最小 diff**（81 行），只改必要源码，不引入额外依赖
 - 📦 **一键打补丁 / 一键还原**（`apply.sh` / `revert.sh`），自动检测、防重复应用
 - 🧩 **不破坏官方安全模型**：`0.0.0.0` 通配符仍被拒绝；`--trusted-host` 显式信任机制保留
-- 🧪 **已在 dsh 0.1.0-rc.5 验证**：页面加载、API 调用、特权接口全通过
+- 🧪 **已在 dsh 0.1.0-rc.7 验证**：页面加载、API 调用、特权接口全通过
 - 🪄 **自动补全 build 依赖**（`unrun`），`pnpm run build` 不会莫名失败
 
 ## 🚀 快速开始
@@ -58,10 +58,10 @@ pnpm install
 > ⚠️ **必须是 git clone 的源码**，不能用 `npm install` 装的成品包——补丁要改源码文件。
 > ⚠️ **不要用 `--depth 1` 浅克隆**（后面固定版本需要完整历史）。
 >
-> 当前 master 分支即目标版本 `0.1.0-rc.5`（commit `47f9438`）。若日后上游已前进（`apply.sh` 会提示版本不匹配），先固定版本再继续：
+> 当前 master 分支即目标版本 `0.1.0-rc.7`（commit `99f6f02`）。若日后上游已前进（`apply.sh` 会提示版本不匹配），先固定版本再继续：
 >
 > ```bash
-> git checkout 47f9438
+> git checkout 99f6f02
 > pnpm install
 > ```
 
@@ -81,7 +81,7 @@ cd deepseek-harness-lan
 
 ```bash
 cd /path/to/deepseek-harness
-pnpm run build:web
+pnpm run build
 ```
 
 > randomUUID polyfill 在 web 产物里，**必须重新构建才生效**。
@@ -284,9 +284,9 @@ if (typeof globalThis.crypto === 'object' && typeof globalThis.crypto.randomUUID
 
 ## 🧩 兼容性
 
-**本补丁针对 dsh `0.1.0-rc.5`（commit `47f9438`）编写并验证。**
+**本补丁针对 dsh `0.1.0-rc.7`（commit `99f6f02`）编写并验证。**
 
-- 验证链路：patch 应用 → `pnpm run build:web` 构建 → Web UI 页面加载 → `/api` 接口调用 → 特权接口（`settings.describe` 等）全通过。
+- 验证链路：patch 应用 → `pnpm run build` 构建 → Web UI 页面加载 → `/api` 接口调用 → 特权接口（`settings.describe` 等）全通过。
 - dsh 上游迭代很快，**其他版本大概率会失效**：
   - 源码上下文变化时，`apply.sh` 的 `git apply --check` 会**检查失败并安全中止**，不会弄脏你的仓库（这是保护机制，不是 bug）。
 - **适配新版本**：

@@ -25,8 +25,8 @@ DSH_DIR="${1:-$PWD}"
 PATCH="$PATCH_DIR/patches/deepseek-harness-lan.patch"
 
 # Target version this patch set was written and verified against.
-EXPECT_VERSION="0.1.0-rc.5"
-EXPECT_COMMIT="47f9438"
+EXPECT_VERSION="0.1.0-rc.7"
+EXPECT_COMMIT="99f6f02"
 
 if [ ! -f "$DSH_DIR/package.json" ]; then
   err "$DSH_DIR/package.json not found — not a deepseek-harness checkout?"

@@ -5,10 +5,10 @@
 > Run [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web UI on your home LAN — bind a specific IP, trust it, and open it from any device.
 
 ![License](https://img.shields.io/badge/license-MIT-green)
-![dsh](https://img.shields.io/badge/dsh-0.1.0--rc.5-blue)
+![dsh](https://img.shields.io/badge/dsh-0.1.0--rc.7-blue)
 ![built-with](https://img.shields.io/badge/built%20with-DeepSeek%20V4%20Flash-4D6BFE)
 
-> **🎯 Target version: dsh `0.1.0-rc.5` (commit `47f9438`)** — the patch is written and verified against this version; other versions may break (see [🧩 Compatibility](#-compatibility)).
+> **🎯 Target version: dsh `0.1.0-rc.7` (commit `99f6f02`)** — the patch is written and verified against this version; other versions may break (see [🧩 Compatibility](#-compatibility)).
 
 ---
 
@@ -30,7 +30,7 @@ But what if you want to open dsh from **Windows, phones, or tablets** on your ho
 - 🔧 **4 minimal diffs** (81 lines) — only the necessary source changes, no extra dependencies
 - 📦 **One-click apply / revert** (`apply.sh` / `revert.sh`) — auto-detection, duplicate-application guard
 - 🧩 **Does not break the official security model**: the `0.0.0.0` wildcard is still rejected; the `--trusted-host` explicit trust mechanism is preserved
-- 🧪 **Verified on dsh 0.1.0-rc.5**: page load, API calls, and privileged endpoints all pass
+- 🧪 **Verified on dsh 0.1.0-rc.7**: page load, API calls, and privileged endpoints all pass
 - 🪄 **Auto-installs the missing build dependency** (`unrun`) so `pnpm run build` doesn't fail mysteriously
 
 ## 🚀 Quick Start
@@ -57,10 +57,10 @@ pnpm install
 > ⚠️ **Must be a `git clone` checkout** — the packaged `npm install` build won't work, because the patch modifies source files.
 > ⚠️ **Do not use a shallow clone (`--depth 1`)** — the version pinning below needs the full history.
 >
-> The current master branch is the target version `0.1.0-rc.5` (commit `47f9438`). If upstream has moved on (`apply.sh` will warn about a version mismatch), pin the version first:
+> The current master branch is the target version `0.1.0-rc.7` (commit `99f6f02`). If upstream has moved on (`apply.sh` will warn about a version mismatch), pin the version first:
 >
 > ```bash
-> git checkout 47f9438
+> git checkout 99f6f02
 > pnpm install
 > ```
 
@@ -80,7 +80,7 @@ cd deepseek-harness-lan
 
 ```bash
 cd /path/to/deepseek-harness
-pnpm run build:web
+pnpm run build
 ```
 
 > The randomUUID polyfill lives in the web bundle, **you must rebuild for it to take effect**.
@@ -284,9 +284,9 @@ if (typeof globalThis.crypto === 'object' && typeof globalThis.crypto.randomUUID
 
 ## 🧩 Compatibility
 
-**This patch is written and verified against dsh `0.1.0-rc.5` (commit `47f9438`).**
+**This patch is written and verified against dsh `0.1.0-rc.7` (commit `99f6f02`).**
 
-- Verification chain: patch applied → `pnpm run build:web` build → Web UI page load → `/api` calls → privileged endpoints (`settings.describe`, etc.) all pass.
+- Verification chain: patch applied → `pnpm run build` build → Web UI page load → `/api` calls → privileged endpoints (`settings.describe`, etc.) all pass.
 - dsh upstream iterates fast; **other versions will most likely break**:
   - When the source context changes, `apply.sh`'s `git apply --check` **fails and aborts safely** without dirtying your repo (this is a protection mechanism, not a bug).
 - **Adapting to new versions**:

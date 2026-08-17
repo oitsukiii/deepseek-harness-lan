@@ -29,8 +29,8 @@ PATCH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DSH_DIR="${1:-$PWD}"
 
 # Target version this patch set was written and verified against.
-EXPECT_VERSION="0.1.0-rc.5"
-EXPECT_COMMIT="47f9438"
+EXPECT_VERSION="0.1.0-rc.7"
+EXPECT_COMMIT="99f6f02"
 
 # ---- 1. sanity: is this really a deepseek-harness checkout? ----
 if [ ! -f "$DSH_DIR/package.json" ]; then
@@ -97,7 +97,7 @@ echo ""
 ok "补丁应用完成！后续步骤："
 echo ""
 info "  1) 重新构建前端（randomUUID polyfill 在 web 产物里）:"
-echo "       cd $DSH_DIR && pnpm run build:web"
+echo "       cd $DSH_DIR && pnpm run build"
 echo ""
 info "  2) 绑定局域网 IP 并信任该入口启动:"
 echo "       pnpm dsh web --host <局域网IP> --trusted-host <局域网IP>"
