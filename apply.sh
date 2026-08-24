@@ -29,8 +29,8 @@ PATCH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DSH_DIR="${1:-$PWD}"
 
 # Target version this patch set was written and verified against.
-EXPECT_VERSION="0.1.0-rc.7"
-EXPECT_COMMIT="99f6f02"
+EXPECT_VERSION="0.1.1-rc.2"
+EXPECT_COMMIT="b150a55"
 
 # ---- 1. sanity: is this really a deepseek-harness checkout? ----
 if [ ! -f "$DSH_DIR/package.json" ]; then
