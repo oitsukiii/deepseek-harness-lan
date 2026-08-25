@@ -297,6 +297,25 @@ if (typeof globalThis.crypto === 'object' && typeof globalThis.crypto.randomUUID
   3. PRs with adapted patches are welcome.
 - **Revert**: `revert.sh` removes the patches in one command; afterwards you can `git pull` to update dsh normally.
 
+## 🗺️ Version compatibility matrix
+
+One patch targets one dsh version line; earlier/different versions may fail `git apply --check` (that's the safety mechanism — it aborts without dirtying your repo).
+
+| dsh version | Released | Patch applies | Links |
+|---|---|---|---|
+| `0.0.1-rc.1` | 2026-08-10 | ❌ | [npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.0.1-rc.1) |
+| `0.0.1-rc.2` | 2026-08-11 | ❌ | [npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.0.1-rc.2) |
+| `0.0.1-rc.5` | 2026-08-12 | ❌ | [npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.0.1-rc.5) |
+| `0.1.0-rc.2` | 2026-08-13 | ❌ | [npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.1.0-rc.2) |
+| `0.1.0-rc.3` | 2026-08-13 | ❌ | [npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.1.0-rc.3) |
+| `0.1.0-rc.6` | 2026-08-13 | ❌ | [npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.1.0-rc.6) |
+| `0.1.0-rc.7` | 2026-08-17 | ❌ (use the [previous patch](https://github.com/oitsukiii/deepseek-harness-lan/commit/511e59ad9735f10c11fd79b1bbd729ef29947305)) | [release](https://github.com/deepseek-ai/deepseek-harness/releases/tag/dsh-v0.1.0-rc.7) |
+| `0.1.0-rc.8` | 2026-08-19 | ✅ | [release](https://github.com/deepseek-ai/deepseek-harness/releases/tag/dsh-v0.1.0-rc.8) |
+| `0.1.1-rc.1` | 2026-08-21 | ✅ | [release](https://github.com/deepseek-ai/deepseek-harness/releases/tag/dsh-v0.1.1-rc.1) |
+| `0.1.1-rc.2` | 2026-08-21 | ✅ current ([patch commit](https://github.com/oitsukiii/deepseek-harness-lan/commit/82a59124813c53bf8dadfc817a2cfdf8b8a3715f)) | [release](https://github.com/deepseek-ai/deepseek-harness/releases/tag/dsh-v0.1.1-rc.2) |
+
+> 💡 Rule of thumb: versions **rc.8 and newer** are covered by the current patch; **rc.7 and older** need the older patch or an upgrade. Early releases (`0.0.1-rc.x`, `0.1.0-rc.2/3/6`) were transitional within 3 days of the public launch — nobody should still be running them.
+
 ## ❓ FAQ
 
 **Q: Can I access it from my phone?**
