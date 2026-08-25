@@ -319,7 +319,7 @@ if (typeof globalThis.crypto === 'object' && typeof globalThis.crypto.randomUUID
 
 One patch targets one dsh version line; earlier/different versions may fail `git apply --check` (that's the safety mechanism — it aborts without dirtying your repo).
 
-| dsh version | Released | Which patch should I apply? |
+| dsh version | dsh Released | Which patch should I apply? |
 |---|---|---|
 | `0.0.1-rc.1` ([npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.0.1-rc.1)) | 2026-08-10 | — |
 | `0.0.1-rc.2` ([npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.0.1-rc.2)) | 2026-08-11 | — |

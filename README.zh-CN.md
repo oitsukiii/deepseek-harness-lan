@@ -319,7 +319,7 @@ if (typeof globalThis.crypto === 'object' && typeof globalThis.crypto.randomUUID
 
 一份补丁对应一个 dsh 版本线；更早/不同的版本可能 `git apply --check` 失败（这正是安全机制——失败即中止，不会弄脏你的仓库）。
 
-| dsh 版本 | 发布时间 | 我该用哪个补丁？ |
+| dsh 版本 | dsh 发布时间 | 我该用哪个补丁？ |
 |---|---|---|
 | `0.0.1-rc.1`（[npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.0.1-rc.1)） | 2026-08-10 | — |
 | `0.0.1-rc.2`（[npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.0.1-rc.2)） | 2026-08-11 | — |
