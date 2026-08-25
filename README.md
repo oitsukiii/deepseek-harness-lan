@@ -12,6 +12,24 @@
 
 ---
 
+## 📑 Table of Contents
+
+- [📖 What is this](#-what-is-this)
+- [✨ Features](#-features)
+- [🚀 Quick Start](#-quick-start)
+- [🔀 Alternative: no source changes (SSH tunnel)](#-alternative-no-source-changes-ssh-tunnel)
+- [🧠 How it works](#-how-it-works)
+- [🔒 Security notes (please read)](#-security-notes-please-read)
+- [🧩 Compatibility](#-compatibility)
+- [🗺️ Version compatibility matrix](#️-version-compatibility-matrix)
+- [❓ FAQ](#-faq)
+- [🧩 Patch files](#-patch-files)
+- [🤝 Contributing](#-contributing)
+- [🎉 Acknowledgements](#-acknowledgements)
+- [📜 License](#-license)
+
+---
+
 ## 📖 What is this
 
 dsh's Web UI is **officially restricted to localhost access only**. `--host 0.0.0.0` fails immediately:
