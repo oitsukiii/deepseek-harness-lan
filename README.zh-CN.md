@@ -319,18 +319,18 @@ if (typeof globalThis.crypto === 'object' && typeof globalThis.crypto.randomUUID
 
 一份补丁对应一个 dsh 版本线；更早/不同的版本可能 `git apply --check` 失败（这正是安全机制——失败即中止，不会弄脏你的仓库）。
 
-| dsh 版本 | 发布时间 | 当前补丁可应用？ |
+| dsh 版本 | 发布时间 | 我该用哪个补丁？ |
 |---|---|---|
-| `0.0.1-rc.1`（[npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.0.1-rc.1)） | 2026-08-10 | ❌ |
-| `0.0.1-rc.2`（[npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.0.1-rc.2)） | 2026-08-11 | ❌ |
-| `0.0.1-rc.5`（[npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.0.1-rc.5)） | 2026-08-12 | ❌ |
-| `0.1.0-rc.2`（[npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.1.0-rc.2)） | 2026-08-13 | ❌ |
-| `0.1.0-rc.3`（[npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.1.0-rc.3)） | 2026-08-13 | ❌ |
-| `0.1.0-rc.6`（[npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.1.0-rc.6)） | 2026-08-13 | ❌ |
-| `0.1.0-rc.7`（[release](https://github.com/deepseek-ai/deepseek-harness/releases/tag/dsh-v0.1.0-rc.7)） | 2026-08-17 | ❌ — 用[旧补丁](https://github.com/oitsukiii/deepseek-harness-lan/commit/511e59ad9735f10c11fd79b1bbd729ef29947305) |
-| `0.1.0-rc.8`（[release](https://github.com/deepseek-ai/deepseek-harness/releases/tag/dsh-v0.1.0-rc.8)） | 2026-08-19 | ✅ |
-| `0.1.1-rc.1`（[release](https://github.com/deepseek-ai/deepseek-harness/releases/tag/dsh-v0.1.1-rc.1)） | 2026-08-21 | ✅ |
-| `0.1.1-rc.2`（[release](https://github.com/deepseek-ai/deepseek-harness/releases/tag/dsh-v0.1.1-rc.2)） | 2026-08-21 | ✅ 当前（[补丁 commit](https://github.com/oitsukiii/deepseek-harness-lan/commit/82a59124813c53bf8dadfc817a2cfdf8b8a3715f)） |
+| `0.0.1-rc.1`（[npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.0.1-rc.1)） | 2026-08-10 | — |
+| `0.0.1-rc.2`（[npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.0.1-rc.2)） | 2026-08-11 | — |
+| `0.0.1-rc.5`（[npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.0.1-rc.5)） | 2026-08-12 | — |
+| `0.1.0-rc.2`（[npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.1.0-rc.2)） | 2026-08-13 | — |
+| `0.1.0-rc.3`（[npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.1.0-rc.3)） | 2026-08-13 | — |
+| `0.1.0-rc.6`（[npm](https://www.npmjs.com/package/@deepseek-ai/dsh/v/0.1.0-rc.6)） | 2026-08-13 | — |
+| `0.1.0-rc.7`（[release](https://github.com/deepseek-ai/deepseek-harness/releases/tag/dsh-v0.1.0-rc.7)） | 2026-08-17 | [v0.1.1](https://github.com/oitsukiii/deepseek-harness-lan/releases/tag/v0.1.1) |
+| `0.1.0-rc.8`（[release](https://github.com/deepseek-ai/deepseek-harness/releases/tag/dsh-v0.1.0-rc.8)） | 2026-08-19 | [v0.2.0](https://github.com/oitsukiii/deepseek-harness-lan/releases/tag/v0.2.0) |
+| `0.1.1-rc.1`（[release](https://github.com/deepseek-ai/deepseek-harness/releases/tag/dsh-v0.1.1-rc.1)） | 2026-08-21 | [v0.2.0](https://github.com/oitsukiii/deepseek-harness-lan/releases/tag/v0.2.0) |
+| `0.1.1-rc.2`（[release](https://github.com/deepseek-ai/deepseek-harness/releases/tag/dsh-v0.1.1-rc.2)） | 2026-08-21 | [v0.2.0](https://github.com/oitsukiii/deepseek-harness-lan/releases/tag/v0.2.0) ⭐ 当前 |
 
 > 💡 经验法则：**rc.8 及以后**的版本用当前补丁即可；**rc.7 及更早**需要用旧补丁或直接升级。早期版本（`0.0.1-rc.x`、`0.1.0-rc.2/3/6`）是公开发布 3 天内的过渡版本，不应有人还在使用。
 
